@@ -13,7 +13,7 @@ stp_names = ['i080-001.stp', 'i080-011.stp', 'i080-021.stp', 'i080-031.stp', 'i0
              'i080-221.stp', 'i080-231.stp', 'i080-241.stp', 'i080-301.stp', 'i080-311.stp', 'i080-321.stp',
              'i080-331.stp', 'i080-341.stp']
 
-# parent_dir = "D:\github\steiner-tree-annealing\gridsearch"
+# parent_dir = r"C:\Users\felip\PycharmProjects\steiner-tree-annealing\gridsearch"
 # for stp_name in stp_names:
 #     directory = stp_name.replace(".stp", "")
 #     path = os.path.join(parent_dir, directory)
