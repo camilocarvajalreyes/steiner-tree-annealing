@@ -13,38 +13,49 @@ stp_names = ['i080-001.stp', 'i080-011.stp', 'i080-021.stp', 'i080-031.stp', 'i0
              'i080-221.stp', 'i080-231.stp', 'i080-241.stp', 'i080-301.stp', 'i080-311.stp', 'i080-321.stp',
              'i080-331.stp', 'i080-341.stp']
 
+# CREATE FOLDER -> you need to create folder called "gridsearch"
 # parent_dir = r"C:\Users\felip\PycharmProjects\steiner-tree-annealing\gridsearch"
 # for stp_name in stp_names:
 #     directory = stp_name.replace(".stp", "")
 #     path = os.path.join(parent_dir, directory)
 #     os.mkdir(path)
 
-params = {
-    "nf": 3000,
-    "save_rate": 5,
-    "repeat": 10
-}
+# DO NOT TOUCH IT
+# params = {
+#     "nf": 3000,
+#     "save_rate": 5,
+#     "repeat": 10
+# }
+#
+# with open("gridsearch/"+'params.json', 'w') as f:
+#     json.dump(params, f)
+#
+# gridsearch = {
+#     "a": list(np.linspace(0.5, 2, num=5)),
+#     "b": list(np.linspace(0, 1, num=5))
+# }
+#
+# with open("gridsearch/" + 'gridsearch.json', 'w') as f:
+#     json.dump(gridsearch, f)
+#
+# UNIFORMS = [
+#             (np.random.uniform(size=params["nf"]),
+#              np.random.uniform(size=params["nf"]))
+#             for _ in range(params["repeat"])
+#             ]
+#
+# with open("gridsearch/" + "UNIFORMS.pickle", "wb") as f:
+#     pickle.dump(np.array(UNIFORMS), f)
 
-with open("gridsearch/"+'params.json', 'w') as f:
-    json.dump(params, f)
+# LOAD params, gridsearch, uniforms (TO USE SAME "RANDOMNESS")
+with open("gridsearch/"+'params.json', ) as f:
+    params = json.load(f)
+with open("gridsearch/"+'gridsearch.json', ) as f:
+    gridsearch = json.load(f)
+with open("gridsearch/" + "UNIFORMS.pickle", "rb") as f:
+    UNIFORMS = pickle.load(f)
 
-gridsearch = {
-    "a": list(np.linspace(0.5, 2, num=5)),
-    "b": list(np.linspace(0, 1, num=5))
-}
-
-with open("gridsearch/" + 'gridsearch.json', 'w') as f:
-    json.dump(gridsearch, f)
-
-UNIFORMS = [
-            (np.random.uniform(size=params["nf"]),
-             np.random.uniform(size=params["nf"]))
-            for _ in range(params["repeat"])
-            ]
-
-with open("gridsearch/" + "UNIFORMS.pickle", "wb") as f:
-    pickle.dump(np.array(UNIFORMS), f)
-
+# START
 for step, stp_name in enumerate(stp_names):
     print("GRAFO", step, len(stp_names), 100*(step+1)/len(stp_names), "%", f"[{stp_name}]")
     df_edges_G, terminals = read_stp("I080/"+stp_name)
