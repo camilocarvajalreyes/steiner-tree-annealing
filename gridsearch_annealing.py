@@ -66,7 +66,7 @@ for step, stp_name in enumerate(stp_names):
     for i, a in enumerate(gridsearch["a"]):
         for j, b in enumerate(gridsearch["b"]):
             for g in [("", False)]:
-                for _, p in enumerate(["BFS"]):
+                for _, p in enumerate(["DFS"]):
                     for r in [("node", "dotted")]:
                         dic_annealing[f"{p}_{r[0]}_ixa={i}_ixb={j}"] = Annealing(
                             nf=params["nf"],
