@@ -85,7 +85,7 @@ for step, stp_name in enumerate(stp_names):
         for k, (key, annealing) in enumerate(dic_annealing.items()):
             print(">", key, k, len(dic_annealing), 100 * (k + 1) / len(dic_annealing), "%", f"[{u}]")
             annealing.MCMC(U, V, save_rate=params["save_rate"])
-            with open(root_name+key+"_times.pickle", "wb") as f:
+            with open(root_name+key+f"_ixu={u}_times.pickle", "wb") as f:
                 pickle.dump(np.array(annealing.times), f)
-            with open(root_name+key+"_CM.pickle", "wb") as f:
+            with open(root_name+key+f"_ixu={u}_CM.pickle", "wb") as f:
                 pickle.dump(np.array(annealing.CM, dtype=object), f)
