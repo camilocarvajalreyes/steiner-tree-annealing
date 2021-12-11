@@ -136,7 +136,7 @@ def plot_graph_by_edges(F, G, terminals, seed=0):
     return nx.draw(grafo_test, pos, edge_color=colors, node_color=c_nodes, with_labels=True)
 
 
-def Kruskal(V, dic_E):
+def Kruskal(V, dic_E, weight_mode=True):
     U = []
     leaves = V.copy()
     NB = {}
@@ -157,8 +157,13 @@ def Kruskal(V, dic_E):
 
             union_find[y][0] = x
             union_find[x][1] += union_find[y][1]
-
-    sorted_edges = sorted(dic_E.items(), key=lambda x: x[1], reverse=False)
+    
+    dic_E_items = list(dic_E.items())
+    if weight_mode:
+        dic_E_items = sorted(dic_E_items, key=lambda x: x[1], reverse=False)
+    else:
+        random.shuffle(dic_E_items)
+    sorted_edges =  dic_E_items
     for (u, _) in sorted_edges:
         u0, u1 = eval(u)
         f0, f1 = find(u0), find(u1)
@@ -180,7 +185,7 @@ def Kruskal(V, dic_E):
     return U, leaves, NB
 
 
-def Trans(v, x, NB_x, df_NB, dic_edges, terminals, greedy=False, path_approach="BFS", remove_approach="edge"):
+def Trans(v, x, NB_x, df_NB, dic_edges, terminals, greedy=False, path_approach="BFS", remove_approach="edge", tree_approach="Kruskal"):
     threshold = 100
     # remove random edge   
     def remove_edge(): 
@@ -253,7 +258,7 @@ def Trans(v, x, NB_x, df_NB, dic_edges, terminals, greedy=False, path_approach="
         V = V.union(u)
         dic_E[str(sorted(u))] = dic_edges[str(sorted(u))]
 
-    x2, leaves, NB_y = Kruskal(V, dic_E)
+    x2, leaves, NB_y = Kruskal(V, dic_E, weight_mode=True) if tree_approach=="Kruskal" else Kruskal(V, dic_E, weight_mode=False)
     y = x2.copy()
     for l in leaves:
         if l not in terminals:
@@ -275,7 +280,7 @@ def weight(x, dic_edges):
 
 
 class Annealing(object):
-    def __init__(self, nf, beta, df_NB_G, dic_weight_edges, terminals, greedy=False, path_approach="BFS", remove_approach="edge"):
+    def __init__(self, nf, beta, df_NB_G, dic_weight_edges, terminals, greedy=False, path_approach="BFS", remove_approach="edge", tree_approach="Kruskal"):
         self.nf = nf
         self.beta = beta
         self.CM = []
@@ -285,6 +290,7 @@ class Annealing(object):
         self.greedy =greedy
         self.path_approach = path_approach
         self.remove_approach = remove_approach
+        self.tree_approach = tree_approach
 
         self.V = set(df_NB_G.index)
         self.df_NB_G = df_NB_G
@@ -296,7 +302,7 @@ class Annealing(object):
         return x0, NB_x0
 
     def Trans(self, v, x, NB_x):
-        return Trans(v, x, NB_x, self.df_NB_G, self.dic_weight_edges, self.terminals, self.greedy, self.path_approach, self.remove_approach)
+        return Trans(v, x, NB_x, self.df_NB_G, self.dic_weight_edges, self.terminals, self.greedy, self.path_approach, self.remove_approach, self.tree_approach)
 
     def coef_R(self, x, y, beta):
         sum_x = sum([self.dic_weight_edges[str(u)] for u in x if u not in y])
