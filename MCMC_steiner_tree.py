@@ -319,7 +319,7 @@ class Annealing(object):
         for n, un in enumerate(u):
             vn = v[n]
             y, NB_y = self.Trans(vn, xn_1, NB_xn_1)
-            if un <= self.coef_R(xn_1, y, self.beta(n)):
+            if un <= self.coef_R(xn_1, y, self.beta[n]):
                 (xn_1, NB_xn_1) = (y, NB_y)
             if (n % save_rate == 0) or (n == self.nf - 1):
                 stop = timeit.default_timer()
