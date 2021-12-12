@@ -8,10 +8,12 @@ import os
 df_opt = pd.read_excel('Testset_I320.xlsx', sheet_name="I080")
 df_opt = df_opt.set_index("Name")
 
-stp_names = ['i080-001.stp', 'i080-011.stp', 'i080-021.stp', 'i080-031.stp', 'i080-041.stp', 'i080-101.stp',
-             'i080-111.stp', 'i080-121.stp', 'i080-131.stp', 'i080-141.stp', 'i080-201.stp', 'i080-211.stp',
-             'i080-221.stp', 'i080-231.stp', 'i080-241.stp', 'i080-301.stp', 'i080-311.stp', 'i080-321.stp',
-             'i080-331.stp', 'i080-341.stp']
+# stp_names = ['i080-001.stp', 'i080-011.stp', 'i080-021.stp', 'i080-031.stp', 'i080-041.stp', 'i080-101.stp',
+#              'i080-111.stp', 'i080-121.stp', 'i080-131.stp', 'i080-141.stp', 'i080-201.stp', 'i080-211.stp',
+#              'i080-221.stp', 'i080-231.stp', 'i080-241.stp', 'i080-301.stp', 'i080-311.stp', 'i080-321.stp',
+#              'i080-331.stp', 'i080-341.stp']
+
+stp_names = ['i080-001.stp', 'i080-111.stp']
 
 # CREATE FOLDER -> you need to create folder called "gridsearch"
 # parent_dir = r"C:\Users\felip\PycharmProjects\steiner-tree-annealing\gridsearch"
@@ -55,6 +57,9 @@ with open("gridsearch/"+'gridsearch.json', ) as f:
 with open("gridsearch/" + "UNIFORMS.pickle", "rb") as f:
     UNIFORMS = pickle.load(f)
 
+params["nf"] = 2000
+gridsearch["a"] = [0, 0.01, 0.05, 0.1, 0.25]
+
 # START
 for step, stp_name in enumerate(stp_names):
     print("GRAFO", step, len(stp_names), 100*(step+1)/len(stp_names), "%", f"[{stp_name}]")
@@ -66,7 +71,7 @@ for step, stp_name in enumerate(stp_names):
     for i, a in enumerate(gridsearch["a"]):
         for j, b in enumerate(gridsearch["b"]):
             for g in [("", False)]:
-                for _, p in enumerate(["DFS"]):
+                for _, p in enumerate(["BFS"]):
                     for r in [("node", "dotted")]:
                         dic_annealing[f"{p}_{r[0]}_ixa={i}_ixb={j}"] = Annealing(
                             nf=params["nf"],
@@ -79,7 +84,7 @@ for step, stp_name in enumerate(stp_names):
                             remove_approach=r[0]
                         )
 
-    root_name = "gridsearch/"+stp_name.replace(".stp", "")+"/"
+    root_name = "gridsearch3/"+stp_name.replace(".stp", "")+"/"
     for u, (U, V) in enumerate(UNIFORMS):
         print("UNIF", u, len(UNIFORMS), 100*(u+1)/len(UNIFORMS), "%", f"[{step}]")
         for k, (key, annealing) in enumerate(dic_annealing.items()):
